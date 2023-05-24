@@ -26,7 +26,7 @@ async function run() {
 		await client.connect();
 
 		const gameCollection = client.db("BoredomBuster").collection("BoardGames");
-		const bookingCollection = client.db("carDoctor").collection("bookings");
+		// const bookingCollection = client.db("carDoctor").collection("bookings");
 
 		app.get("/games", async (req, res) => {
 			const cursor = gameCollection.find();
@@ -41,44 +41,44 @@ async function run() {
 			res.send(result);
 		});
 
-		// bookings
-		app.get("/bookings", async (req, res) => {
-			console.log(req.query.email);
-			let query = {};
-			if (req.query?.email) {
-				query = { email: req.query.email };
-			}
-			const result = await bookingCollection.find(query).toArray();
+		// // bookings
+		// app.get("/bookings", async (req, res) => {
+		// 	console.log(req.query.email);
+		// 	let query = {};
+		// 	if (req.query?.email) {
+		// 		query = { email: req.query.email };
+		// 	}
+		// 	const result = await bookingCollection.find(query).toArray();
+		// 	res.send(result);
+		// });
+
+		app.post("/games", async (req, res) => {
+			const game = req.body;
+			console.log(game);
+			const result = await bookingCollection.insertOne(game);
 			res.send(result);
 		});
 
-		app.post("/bookings", async (req, res) => {
-			const booking = req.body;
-			console.log(booking);
-			const result = await bookingCollection.insertOne(booking);
-			res.send(result);
-		});
+		// app.patch("/bookings/:id", async (req, res) => {
+		// 	const id = req.params.id;
+		// 	const filter = { _id: new ObjectId(id) };
+		// 	const updatedBooking = req.body;
+		// 	console.log(updatedBooking);
+		// 	const updateDoc = {
+		// 		$set: {
+		// 			status: updatedBooking.status,
+		// 		},
+		// 	};
+		// 	const result = await bookingCollection.updateOne(filter, updateDoc);
+		// 	res.send(result);
+		// });
 
-		app.patch("/bookings/:id", async (req, res) => {
-			const id = req.params.id;
-			const filter = { _id: new ObjectId(id) };
-			const updatedBooking = req.body;
-			console.log(updatedBooking);
-			const updateDoc = {
-				$set: {
-					status: updatedBooking.status,
-				},
-			};
-			const result = await bookingCollection.updateOne(filter, updateDoc);
-			res.send(result);
-		});
-
-		app.delete("/bookings/:id", async (req, res) => {
-			const id = req.params.id;
-			const query = { _id: new ObjectId(id) };
-			const result = await bookingCollection.deleteOne(query);
-			res.send(result);
-		});
+		// app.delete("/bookings/:id", async (req, res) => {
+		// 	const id = req.params.id;
+		// 	const query = { _id: new ObjectId(id) };
+		// 	const result = await bookingCollection.deleteOne(query);
+		// 	res.send(result);
+		// });
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
