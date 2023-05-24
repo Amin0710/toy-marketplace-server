@@ -18,6 +18,7 @@ const client = new MongoClient(uri, {
 		strict: true,
 		deprecationErrors: true,
 	},
+	writeConcern: { w: "majority" },
 });
 
 async function run() {
@@ -55,7 +56,7 @@ async function run() {
 		app.post("/games", async (req, res) => {
 			const game = req.body;
 			console.log(game);
-			const result = await bookingCollection.insertOne(game);
+			const result = await gameCollection.insertOne(game);
 			res.send(result);
 		});
 
