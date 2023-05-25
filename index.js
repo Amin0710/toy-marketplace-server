@@ -27,7 +27,6 @@ async function run() {
 		await client.connect();
 
 		const gameCollection = client.db("BoredomBuster").collection("BoardGames");
-		// const bookingCollection = client.db("carDoctor").collection("bookings");
 
 		// All Games
 		app.get("/games", async (req, res) => {
