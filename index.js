@@ -29,12 +29,14 @@ async function run() {
 		const gameCollection = client.db("BoredomBuster").collection("BoardGames");
 		// const bookingCollection = client.db("carDoctor").collection("bookings");
 
+		// All Games
 		app.get("/games", async (req, res) => {
 			const cursor = gameCollection.find();
 			const result = await cursor.toArray();
 			res.send(result);
 		});
 
+		// Specific Games
 		app.get("/games/:id", async (req, res) => {
 			const id = req.params.id;
 			const query = { _id: new ObjectId(id) };
@@ -42,17 +44,18 @@ async function run() {
 			res.send(result);
 		});
 
-		// // bookings
-		// app.get("/bookings", async (req, res) => {
-		// 	console.log(req.query.email);
-		// 	let query = {};
-		// 	if (req.query?.email) {
-		// 		query = { email: req.query.email };
-		// 	}
-		// 	const result = await bookingCollection.find(query).toArray();
-		// 	res.send(result);
-		// });
+		// My Games
+		app.get("/mygames", async (req, res) => {
+			console.log(req.query);
+			let query = {};
+			if (req.query?.seller_email) {
+				query = { seller_email: req.query.seller_email };
+			}
+			const result = await gameCollection.find(query).toArray();
+			res.send(result);
+		});
 
+		//Add A Game
 		app.post("/games", async (req, res) => {
 			const game = req.body;
 			console.log(game);
