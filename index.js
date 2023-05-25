@@ -50,8 +50,22 @@ async function run() {
 			if (req.query?.seller_email) {
 				query = { seller_email: req.query.seller_email };
 			}
+			if (req.query?.sort) {
+				sort = { sort: req.query.sort };
+			}
 			const result = await gameCollection.find(query).toArray();
-			res.send(result);
+			const sortNumber = parseInt(sort.sort);
+			if (sortNumber === 1 || sortNumber === -1) {
+				const sortedResult = await gameCollection
+					.aggregate([
+						{ $match: query },
+						{ $sort: { price: sortNumber, _id: sortNumber } },
+					])
+					.toArray();
+				res.send(sortedResult);
+			} else {
+				res.send(result);
+			}
 		});
 
 		//Add A Game
