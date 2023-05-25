@@ -44,36 +44,37 @@ async function run() {
 			res.send(result);
 		});
 
-		//Add A Game
-		app.post("/games", async (req, res) => {
-			const game = req.body;
-			console.log(game);
-			const result = await gameCollection.insertOne(game);
-			res.send(result);
-		});
-
-		// app.patch("/bookings/:id", async (req, res) => {
-		// 	const id = req.params.id;
-		// 	const filter = { _id: new ObjectId(id) };
-		// 	const updatedBooking = req.body;
-		// 	console.log(updatedBooking);
-		// 	const updateDoc = {
-		// 		$set: {
-		// 			status: updatedBooking.status,
-		// 		},
-		// 	};
-		// 	const result = await bookingCollection.updateOne(filter, updateDoc);
-		// 	res.send(result);
-		// });
-
 		// My Games
 		app.get("/mygames", async (req, res) => {
-			console.log(req.query);
 			let query = {};
 			if (req.query?.seller_email) {
 				query = { seller_email: req.query.seller_email };
 			}
 			const result = await gameCollection.find(query).toArray();
+			res.send(result);
+		});
+
+		//Add A Game
+		app.post("/games", async (req, res) => {
+			const game = req.body;
+			const result = await gameCollection.insertOne(game);
+			res.send(result);
+		});
+
+		//Update a Game
+		app.patch("/games/:id", async (req, res) => {
+			const id = req.params.id;
+			const filter = { _id: new ObjectId(id) };
+			const updatedGame = req.body;
+			console.log(updatedGame);
+			const updateDoc = {
+				$set: {
+					price: updatedGame.price,
+					available_quantity: updatedGame.available_quantity,
+					detail_description: updatedGame.detail_description,
+				},
+			};
+			const result = await gameCollection.updateOne(filter, updateDoc);
 			res.send(result);
 		});
 
