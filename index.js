@@ -44,17 +44,6 @@ async function run() {
 			res.send(result);
 		});
 
-		// My Games
-		app.get("/mygames", async (req, res) => {
-			console.log(req.query);
-			let query = {};
-			if (req.query?.seller_email) {
-				query = { seller_email: req.query.seller_email };
-			}
-			const result = await gameCollection.find(query).toArray();
-			res.send(result);
-		});
-
 		//Add A Game
 		app.post("/games", async (req, res) => {
 			const game = req.body;
@@ -77,12 +66,23 @@ async function run() {
 		// 	res.send(result);
 		// });
 
-		// app.delete("/bookings/:id", async (req, res) => {
-		// 	const id = req.params.id;
-		// 	const query = { _id: new ObjectId(id) };
-		// 	const result = await bookingCollection.deleteOne(query);
-		// 	res.send(result);
-		// });
+		// My Games
+		app.get("/mygames", async (req, res) => {
+			console.log(req.query);
+			let query = {};
+			if (req.query?.seller_email) {
+				query = { seller_email: req.query.seller_email };
+			}
+			const result = await gameCollection.find(query).toArray();
+			res.send(result);
+		});
+
+		app.delete("/games/:id", async (req, res) => {
+			const id = req.params.id;
+			const query = { _id: new ObjectId(id) };
+			const result = await gameCollection.deleteOne(query);
+			res.send(result);
+		});
 
 		// Send a ping to confirm a successful connection
 		await client.db("admin").command({ ping: 1 });
